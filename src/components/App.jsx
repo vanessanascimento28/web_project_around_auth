@@ -6,10 +6,11 @@ import Footer from "./Footer/Footer";
 import EditAvatar from "./Main/components/Popup/EditAvatar/EditAvatar";
 import EditProfile from "./Main/components/editProfile/EditProfile";
 import ConfirmDeletePopup from "./Main/components/Popup/RemoveCard/RemoveCard";
-import CurrentUserContext from "../contexts/CurrentUserContext";
+import CurrentUserContext from "../contexts/CurrentUserContext.js";
 import api from "../utils/api";
 import Register from "../components/Main/components/Register";
 import Login from "../components/Main/components/Login";
+
 
 function App() {
   const [cards, setCards] = useState([]);
@@ -17,6 +18,7 @@ function App() {
     name: "Vanessa",
     about: "Web Developer",
   });
+  const [loggedIn, setLoggedIn] = useState(false);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isEditAvatarOpen, setIsEditAvatarOpen] = useState(false);
@@ -107,9 +109,9 @@ function App() {
           throw new Error("Resposta inválida da API ao atualizar curtida.");
         }
 
-    setCards((prev)=>
-    prev.map((c) => (c._id === card._id ? updatedCard : c))
-    );
+        setCards((prev) =>
+          prev.map((c) => (c._id === card._id ? updatedCard : c))
+        );
       })
       .catch((err) => console.error("Erro ao atualizar like:", err));
   }
@@ -135,43 +137,58 @@ function App() {
     setCardToDelete(null);
   }
 
-  return (
-    <CurrentUserContext.Provider
-      value={{ currentUser, handleUpdateUserInfo, handleUpdateAvatar }}
-    >
-      <div className="page__content">
-        <Header />
+ return (
+  <CurrentUserContext.Provider
+    value={{ currentUser, handleUpdateUserInfo, handleUpdateAvatar }}
+  >
+    <Routes>
+      {/* Rotas públicas */}
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
 
-        <Main
-          handleEditUserPopup={handleEditUserPopup}
-          handleOpenAddCard={handleOpenAddCard}
-          handleCloseAddCard={handleCloseAddCard}
-          isAddCardOpen={isAddCardOpen}
-          handleOpenEditAvatar={handleOpenEditAvatar}
-          handleCardLike={handleCardLike}
-          handleDeleteCard={handleTrashClick}
-          cards={cards}
-          onAddPlaceSubmit={handleAddPlaceSubmit}
-        />
+      {/* Rotas privadas (protegidas por login) */}
+      <Route
+        path="/"
+        element={
+          <div className="page__content">
+            <Header />
 
-        <EditProfile
-          isOpen={isEditProfileOpen}
-          onClose={handleEditUserPopup}
-          onUpdateUser={handleUpdateUserInfo}
-        />
+            <Main
+              handleEditUserPopup={handleEditUserPopup}
+              handleOpenAddCard={handleOpenAddCard}
+              handleCloseAddCard={handleCloseAddCard}
+              isAddCardOpen={isAddCardOpen}
+              handleOpenEditAvatar={handleOpenEditAvatar}
+              handleCardLike={handleCardLike}
+              handleDeleteCard={handleTrashClick}
+              cards={cards}
+              onAddPlaceSubmit={handleAddPlaceSubmit}
+            />
 
-        <EditAvatar isOpen={isEditAvatarOpen} onClose={handleCloseEditAvatar} />
+            <EditProfile
+              isOpen={isEditProfileOpen}
+              onClose={handleEditUserPopup}
+              onUpdateUser={handleUpdateUserInfo}
+            />
 
-        <ConfirmDeletePopup
-          isOpen={isConfirmPopupOpen}
-          onClose={handleCloseConfirmPopup}
-          onConfirm={handleConfirmDelete}
-        />
+            <EditAvatar
+              isOpen={isEditAvatarOpen}
+              onClose={handleCloseEditAvatar}
+            />
 
-        <Footer />
-      </div>
-    </CurrentUserContext.Provider>
-  );
+            <ConfirmDeletePopup
+              isOpen={isConfirmPopupOpen}
+              onClose={handleCloseConfirmPopup}
+              onConfirm={handleConfirmDelete}
+            />
+
+            <Footer />
+          </div>
+        }
+      />
+    </Routes>
+  </CurrentUserContext.Provider>
+);
 }
 
 export default App;

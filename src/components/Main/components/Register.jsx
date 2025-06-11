@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../../../utils/auth";
-import vectorIcon from "../../images/Vector.svg";
+import vectorIcon from "../../../images/Vector.svg";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -21,7 +21,7 @@ function Register() {
       if (!returnData.data.email || !returnData.data._id) {
         throw new Error(`Data not found ${returnData}`);
       }
-      navigate("/signin");
+      navigate("/login");
     } catch (error) {
       alert("Erro no registro");
       console.log("[REGISTER] - Erro", error);
@@ -31,7 +31,7 @@ function Register() {
   }
 
   return (
-    <div className="register__page">
+    <div className="register">
       <header className="register__header">
         <div className="register__header-left">
           <img
@@ -41,7 +41,7 @@ function Register() {
           />
         </div>
         <div className="register__header-right">
-          <Link to="/signin" className="register__login-link">
+          <Link to="/login" className="register__login-link">
             Faça o login
           </Link>
         </div>
@@ -74,7 +74,7 @@ function Register() {
       </form>
       <div className="register__signin">
         <p>Já é um membro?</p>
-        <Link to="/signin" className="register__signin-link">
+        <Link to="/login" className="register__signin-link">
           Faça o login aqui!
         </Link>
       </div>

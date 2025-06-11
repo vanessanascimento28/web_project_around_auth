@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authorize } from "../../../utils/auth";
-import vectorIcon from "../../images/Vector.svg";
+import vectorIcon from "../../../images/Vector.svg";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -43,7 +43,7 @@ function Login() {
           />
         </div>
         <div className="login__header-right">
-          <Link to="/signin" className="login__link">
+          <Link to="/login" className="login__link">
             Entrar
           </Link>
         </div>
@@ -76,7 +76,7 @@ function Login() {
       </form>
       <div className="login__signin">
         <p>Ainda não é membro?</p>
-        <Link to="/signup" className="login__signup-link">
+        <Link to="/register" className="login__signup-link">
           Inscreva-se aqui!
         </Link>
       </div>
