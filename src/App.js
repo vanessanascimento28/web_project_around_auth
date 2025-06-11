@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -29,7 +29,7 @@ function App() {
                     localStorage.removeItem("jwt");
                 });
         }
-    }, [navigate]);
+    }, []);
 
     // Registro
     const handleRegister = ({ email, password }) => {
@@ -84,6 +84,7 @@ function App() {
                 />
                 <Route path="/signup" element={<Register onRegister={handleRegister} />} />
                 <Route path="/signin" element={<Login onLogin={handleLogin} />} />
+                <Route path="*" element={<Navigate to="/signin" replace />} />
             </Routes>
 
             <InfoTooltip isOpen={isTooltipOpen} isSuccess={isSuccess} onClose={() => setIsTooltipOpen(false)} />

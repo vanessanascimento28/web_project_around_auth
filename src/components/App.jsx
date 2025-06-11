@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Header from "./Header/Header";
 import Main from "./Main/Main";
 import Footer from "./Footer/Footer";
 import EditAvatar from "./Main/components/Popup/EditAvatar/EditAvatar";
-import EditProfile from "./Main/components/Popup/EditProfile/EditProfile";
+import EditProfile from "./Main/components/editProfile/EditProfile";
 import ConfirmDeletePopup from "./Main/components/Popup/RemoveCard/RemoveCard";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 import api from "../utils/api";

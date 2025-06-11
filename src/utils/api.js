@@ -1,3 +1,5 @@
+import { BASE_URL } from "./auth";
+
 class Api {
     constructor({ baseUrl, headers }) {
         this._baseUrl = baseUrl;
