@@ -31,16 +31,16 @@ function Register() {
   }
 
   return (
-    <div className="header__content">
-      <header className="header__register">
-        <div className="header__register-left">
+    <div className="register__page">
+      <header className="register__header">
+        <div className="register__header-left">
           <img
             className="header__logo"
             src={vectorIcon}
             alt="escrita Around The U.S."
           />
         </div>
-        <div className="header__register-right">
+        <div className="register__header-right">
           <Link to="/signin" className="register__login-link">
             Faça o login
           </Link>
@@ -66,7 +66,7 @@ function Register() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <div className="register__butto-container">
+        <div className="register__button-container">
           <button type="submit" className="register__button">
             Inscrever-se
           </button>

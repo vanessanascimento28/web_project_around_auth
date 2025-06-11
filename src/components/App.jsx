@@ -8,6 +8,8 @@ import EditProfile from "./Main/components/editProfile/EditProfile";
 import ConfirmDeletePopup from "./Main/components/Popup/RemoveCard/RemoveCard";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 import api from "../utils/api";
+import Register from "../components/Main/components/Register";
+import Login from "../components/Main/components/Login";
 
 function App() {
   const [cards, setCards] = useState([]);
