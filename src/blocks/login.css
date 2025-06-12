@@ -1,4 +1,4 @@
-.register__header {
+.login__header {
   max-width: 880px;
   display: flex;
   justify-content: space-between;
@@ -7,7 +7,7 @@
   border-bottom: 1px solid #ffffff22;
 }
 
-.register__login-link {
+.login__link {
   color: white;
   text-decoration: none;
   font-size: 18px;
@@ -15,18 +15,18 @@
   max-width: 103px;
 }
 
-.register__login-link:hover {
+.login-link:hover {
   opacity: 0.6;
 }
 
-.register__form {
+.login__form {
   display: flex;
   flex-direction: column;
   max-width: 358px;
   margin: 60px auto;
 }
 
-.register__title {
+.login__title {
   font-size: 24px;
   text-align: center;
   font-weight: 900;
@@ -35,7 +35,7 @@
   margin-top: 60px;
 }
 
-.register__input {
+.login__input {
   background: transparent;
   border: none;
   border-bottom: 1px solid white;
@@ -46,7 +46,7 @@
   outline: none;
 }
 
-.register__button {
+.login__button {
   margin: 186px 0px 0px;
   text-align: center;
   font-size: 18px;
@@ -58,33 +58,33 @@
   padding: 14px;
 }
 
-.register__button:hover {
+.login__button:hover {
   opacity: 0.6;
 }
 
-.register__signin {
+.login__signin {
   color: white;
   display: flex;
   justify-content: center;
 }
 
-.register__signin-link {
+.login__signup-link {
   color: white;
   text-decoration: none;
 }
 
-.register__signin-link:hover {
+.login__signup-link:hover {
   opacity: 0.6;
 }
 
 @media screen and (max-width: 680px) {
-  .register__header {
+  .login__header {
     max-width: 100%;
     justify-content: space-between;
     margin: 28px 30px 0;
   }
 
-  .register__login-link {
+  .login-link {
     font-size: 14px;
     font-weight: 400;
     max-width: 80px;

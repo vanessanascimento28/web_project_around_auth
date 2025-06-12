@@ -33,19 +33,15 @@ function Register() {
   return (
     <div className="register">
       <header className="register__header">
-        <div className="register__header-left">
           <img
             className="header__logo"
             src={vectorIcon}
             alt="escrita Around The U.S."
           />
-        </div>
-        <div className="register__header-right">
           <Link to="/login" className="register__login-link">
             Faça o login
           </Link>
-        </div>
-        <hr className="header__line" />
+        
       </header>
 
       <form className="register__form" onSubmit={handleSubmit}>
@@ -66,17 +62,17 @@ function Register() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <div className="register__button-container">
+        
           <button type="submit" className="register__button">
             Inscrever-se
           </button>
-        </div>
+        
       </form>
       <div className="register__signin">
-        <p>Já é um membro?</p>
+        <p>Já é um membro?{' '}
         <Link to="/login" className="register__signin-link">
           Faça o login aqui!
-        </Link>
+        </Link></p>
       </div>
     </div>
   );
