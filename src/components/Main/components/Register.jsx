@@ -3,45 +3,52 @@ import { Link, useNavigate } from "react-router-dom";
 import { register } from "../../../utils/auth";
 import vectorIcon from "../../../images/Vector.svg";
 
-function Register() {
+function Register({ setTooltipOpen, setTooltipSuccess, setTooltipMessage }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
+
     try {
-      console.log("Start loading");
       const response = await register({ email, password });
-      if (response.status == 400) {
-        const message = await response.json();
-        throw new Error(message.error);
-      }
       const returnData = await response.json();
-      if (!returnData.data.email || !returnData.data._id) {
-        throw new Error(`Data not found ${returnData}`);
+
+      if (!response.ok) {
+        throw new Error(returnData.error || "Erro desconhecido ao registrar.");
       }
+
+      if (!returnData.data?.email || !returnData.data?._id) {
+        throw new Error("Dados incompletos no retorno da API.");
+      }
+
+      setTooltipSuccess(true);
+      setTooltipMessage("Vitória, faça seu login!");
+      setTooltipOpen(true);
       navigate("/login");
+
     } catch (error) {
-      alert("Erro no registro");
-      console.log("[REGISTER] - Erro", error);
-    } finally {
-      console.log("Stop loading");
+      console.error("[REGISTER] - Erro:", error);
+      setTooltipSuccess(false);
+      setTooltipMessage("Ops! Algo deu errado no cadastro.");
+      console.log('Abrindo tooltip')
+      setTooltipOpen(true);
+      console.log("TOOLTIP DEVERIA ABRIR AGORA");
     }
   }
 
   return (
     <div className="register">
       <header className="register__header">
-          <img
-            className="header__logo"
-            src={vectorIcon}
-            alt="escrita Around The U.S."
-          />
-          <Link to="/login" className="register__login-link">
-            Faça o login
-          </Link>
-        
+        <img
+          className="header__logo"
+          src={vectorIcon}
+          alt="escrita Around The U.S."
+        />
+        <Link to="/login" className="register__login-link">
+          Faça o login
+        </Link>
       </header>
 
       <form className="register__form" onSubmit={handleSubmit}>
@@ -62,17 +69,18 @@ function Register() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        
-          <button type="submit" className="register__button">
-            Inscrever-se
-          </button>
-        
+        <button type="submit" className="register__button">
+          Inscrever-se
+        </button>
       </form>
+
       <div className="register__signin">
-        <p>Já é um membro?{' '}
-        <Link to="/login" className="register__signin-link">
-          Faça o login aqui!
-        </Link></p>
+        <p>
+          Já é um membro?{" "}
+          <Link to="/login" className="register__signin-link">
+            Faça o login aqui!
+          </Link>
+        </p>
       </div>
     </div>
   );

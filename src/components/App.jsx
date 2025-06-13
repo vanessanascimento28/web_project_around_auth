@@ -12,6 +12,7 @@ import Register from "../components/Main/components/Register";
 import Login from "../components/Main/components/Login";
 import ProtectedRoute from "./Main/components/ProtectedRoute/ProtectedRoute.jsx";
 import { checkToken } from "../utils/auth.js";
+import InfoTooltip from "./Main/components/InfoTooltip.jsx";
 
 function App() {
   const [cards, setCards] = useState([]);
@@ -25,15 +26,18 @@ function App() {
   const [isEditAvatarOpen, setIsEditAvatarOpen] = useState(false);
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
   const [cardToDelete, setCardToDelete] = useState(null);
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const [isTooltipSuccess, setIsTooltipSuccess] = useState(false);
+  const [tooltipMessage, setTooltipMessage] = useState("");
   const navigate = useNavigate();
 
-   let handleCheckToken;
+  let handleCheckToken;
 
-   useEffect(() => {
+  useEffect(() => {
     handleCheckToken();
   }, [handleCheckToken]);
 
-    handleCheckToken = useCallback(async () => {
+  handleCheckToken = useCallback(async () => {
     const token = localStorage.getItem("jwt");
     if (!token) {
       console.log("User not logged");
@@ -49,13 +53,13 @@ function App() {
       }
       const returnData = await response.json();
       if (!returnData.data) {
-        handleLogout()
+        handleLogout();
         navigate("/login");
         throw new Error("Token invalido ${returnData}");
       }
       localStorage.setItem("jwt", returnData.token);
-      setLoggedIn(true)
-      navigate("/")
+      setLoggedIn(true);
+      navigate("/");
     } catch (error) {
       alert("Erro no token!");
       console.log("[TOKEN] - Erro", error);
@@ -64,9 +68,9 @@ function App() {
     }
   }, [navigate]);
 
-  function handleLogout(){
-    localStorage.removeItem("jwt")
-    setLoggedIn(false)
+  function handleLogout() {
+    localStorage.removeItem("jwt");
+    setLoggedIn(false);
   }
 
   useEffect(() => {
@@ -187,7 +191,17 @@ function App() {
     >
       <Routes>
         {/* Rotas públicas */}
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/register"
+          element={
+            <Register
+              setTooltipOpen={setIsTooltipOpen}
+              setTooltipSuccess={setIsTooltipSuccess}
+              setTooltipMessage={setTooltipMessage}
+            />
+          }
+        />
+
         <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
 
         {/* Rotas privadas (protegidas por login) */}
@@ -233,6 +247,12 @@ function App() {
           }
         />
       </Routes>
+      <InfoTooltip
+  isOpen={isTooltipOpen}
+  onClose={() => setIsTooltipOpen(false)}
+  isSuccess={isTooltipSuccess}
+  message={tooltipMessage}
+/>
     </CurrentUserContext.Provider>
   );
 }

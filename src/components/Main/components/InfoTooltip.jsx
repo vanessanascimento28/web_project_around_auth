@@ -1,15 +1,33 @@
-function InfoTooltip({ isOpen, onClose, success }) {
-    return (
-        <div className={`popup ${isOpen ? "popup_opened" : ""}`}>
-            <div className="popup__container">
-                <div className={`popup__icon ${success ? "popup__icon_success" : "popup__icon_fail"}`} />
-                <p className="popup__message">
-                    {success ? "Cadastro realizado com sucesso!" : "Ocorreu um erro. Tente novamente."}
-                </p>
-                <button type="button" className="popup__close" onClick={onClose}></button>
-            </div>
-        </div>
-    );
+import closeIcon from "../../../images/CloseIcon.svg";
+import sucessIcon from "../../../images/sucessicon.svg";
+import errorIcon from "../../../images/erroricon.svg";
+
+function InfoTooltip({ isOpen, onClose, isSuccess, message }) {
+
+  return (
+    <div className={`infotooltip ${isOpen ? "infotooltip_opened" : ""}`}>
+      <div className="infotooltip__overlay">
+      <button
+          className="infotooltip__close-button"
+          type="button"
+          onClick={onClose}>
+       <img
+            className="infotooltip__close-icon"
+            src={closeIcon}
+            alt="ícone de fechar"
+          />
+        </button>
+      <div className="infotooltip__container">
+        <img
+          className="infotooltip__icon"
+          src={isSuccess ? sucessIcon : errorIcon}
+          alt={isSuccess ? "Sucesso" : "Erro"}
+        />
+        <p className="infotooltip__message">{message}</p>
+      </div>
+      </div>
+    </div>
+  );
 }
 
 export default InfoTooltip;

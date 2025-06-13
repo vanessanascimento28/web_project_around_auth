@@ -8,8 +8,6 @@ export const register = async ({ email, password }) => {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({ email, password }),
-    }).then((res) => {
-        return res.ok ? res.json() : Promise.reject(`Erro: ${res.status}`);
     });
 };
 
