@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Header from "./Header/Header";
 import Main from "./Main/Main";
@@ -11,7 +11,7 @@ import api from "../utils/api";
 import Register from "../components/Main/components/Register";
 import Login from "../components/Main/components/Login";
 import ProtectedRoute from "./Main/components/ProtectedRoute/ProtectedRoute.jsx";
-
+import { checkToken } from "../utils/auth.js";
 
 function App() {
   const [cards, setCards] = useState([]);
@@ -25,6 +25,49 @@ function App() {
   const [isEditAvatarOpen, setIsEditAvatarOpen] = useState(false);
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
   const [cardToDelete, setCardToDelete] = useState(null);
+  const navigate = useNavigate();
+
+   let handleCheckToken;
+
+   useEffect(() => {
+    handleCheckToken();
+  }, [handleCheckToken]);
+
+    handleCheckToken = useCallback(async () => {
+    const token = localStorage.getItem("jwt");
+    if (!token) {
+      console.log("User not logged");
+      navigate("/login");
+      return;
+    }
+    try {
+      console.log("Start loading");
+      const response = await checkToken(token);
+      if (response.status == 400 || response.status == 401) {
+        const message = await response.json();
+        throw new Error(message);
+      }
+      const returnData = await response.json();
+      if (!returnData.data) {
+        handleLogout()
+        navigate("/login");
+        throw new Error("Token invalido ${returnData}");
+      }
+      localStorage.setItem("jwt", returnData.token);
+      setLoggedIn(true)
+      navigate("/")
+    } catch (error) {
+      alert("Erro no token!");
+      console.log("[TOKEN] - Erro", error);
+    } finally {
+      console.log("Stop loading");
+    }
+  }, [navigate]);
+
+  function handleLogout(){
+    localStorage.removeItem("jwt")
+    setLoggedIn(false)
+  }
 
   useEffect(() => {
     api
@@ -138,60 +181,60 @@ function App() {
     setCardToDelete(null);
   }
 
- return (
-  <CurrentUserContext.Provider
-    value={{ currentUser, handleUpdateUserInfo, handleUpdateAvatar }}
-  >
-    <Routes>
-      {/* Rotas públicas */}
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
+  return (
+    <CurrentUserContext.Provider
+      value={{ currentUser, handleUpdateUserInfo, handleUpdateAvatar }}
+    >
+      <Routes>
+        {/* Rotas públicas */}
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
 
-      {/* Rotas privadas (protegidas por login) */}
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute isLoggedIn={loggedIn}>
-          <div className="page__content">
-            <Header />
+        {/* Rotas privadas (protegidas por login) */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute isLoggedIn={loggedIn}>
+              <div className="page__content">
+                <Header handleLogout={handleLogout} />
 
-            <Main
-              handleEditUserPopup={handleEditUserPopup}
-              handleOpenAddCard={handleOpenAddCard}
-              handleCloseAddCard={handleCloseAddCard}
-              isAddCardOpen={isAddCardOpen}
-              handleOpenEditAvatar={handleOpenEditAvatar}
-              handleCardLike={handleCardLike}
-              handleDeleteCard={handleTrashClick}
-              cards={cards}
-              onAddPlaceSubmit={handleAddPlaceSubmit}
-            />
+                <Main
+                  handleEditUserPopup={handleEditUserPopup}
+                  handleOpenAddCard={handleOpenAddCard}
+                  handleCloseAddCard={handleCloseAddCard}
+                  isAddCardOpen={isAddCardOpen}
+                  handleOpenEditAvatar={handleOpenEditAvatar}
+                  handleCardLike={handleCardLike}
+                  handleDeleteCard={handleTrashClick}
+                  cards={cards}
+                  onAddPlaceSubmit={handleAddPlaceSubmit}
+                />
 
-            <EditProfile
-              isOpen={isEditProfileOpen}
-              onClose={handleEditUserPopup}
-              onUpdateUser={handleUpdateUserInfo}
-            />
+                <EditProfile
+                  isOpen={isEditProfileOpen}
+                  onClose={handleEditUserPopup}
+                  onUpdateUser={handleUpdateUserInfo}
+                />
 
-            <EditAvatar
-              isOpen={isEditAvatarOpen}
-              onClose={handleCloseEditAvatar}
-            />
+                <EditAvatar
+                  isOpen={isEditAvatarOpen}
+                  onClose={handleCloseEditAvatar}
+                />
 
-            <ConfirmDeletePopup
-              isOpen={isConfirmPopupOpen}
-              onClose={handleCloseConfirmPopup}
-              onConfirm={handleConfirmDelete}
-            />
+                <ConfirmDeletePopup
+                  isOpen={isConfirmPopupOpen}
+                  onClose={handleCloseConfirmPopup}
+                  onConfirm={handleConfirmDelete}
+                />
 
-            <Footer />
-          </div>
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
-  </CurrentUserContext.Provider>
-);
+                <Footer />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </CurrentUserContext.Provider>
+  );
 }
 
 export default App;
