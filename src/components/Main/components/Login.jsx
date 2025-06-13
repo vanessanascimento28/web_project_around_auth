@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { authorize } from "../../../utils/auth";
 import vectorIcon from "../../../images/Vector.svg";
 
-function Login() {
+function Login({ setLoggedIn }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -12,19 +12,15 @@ function Login() {
     e.preventDefault();
     try {
       console.log("Start loading");
-      const response = await authorize({ email, password });
-      if (response.status == 400 || response.status == 401) {
-        const message = await response.json();
-        throw new Error(message);
+      const data = await authorize({ email, password });
+      if (!data.token) {
+        throw new Error("Token não encontrado");
       }
-      const returnData = await response.json();
-      if (!returnData.token) {
-        throw new Error(`Data not found ${returnData}`);
-      }
-      localStorage.setItem("jwt", JSON.stringify(returnData));
+
+      setLoggedIn(true);
       navigate("/");
     } catch (error) {
-      alert("Erro no registro");
+      alert("Erro no login");
       console.log("[LOGIN] - Erro", error);
     } finally {
       console.log("Stop loading");
@@ -42,7 +38,6 @@ function Login() {
         <Link to="/login" className="login__link">
           Entrar
         </Link>
-        
       </header>
 
       <form className="login__form" onSubmit={handleSubmit}>
@@ -69,10 +64,11 @@ function Login() {
         </button>
       </form>
       <div className="login__signin">
-        <p>Ainda não é membro?{' '}
-        <Link to="/register" className="login__signup-link">
-          Inscreva-se aqui!
-        </Link>
+        <p>
+          Ainda não é membro?{" "}
+          <Link to="/register" className="login__signup-link">
+            Inscreva-se aqui!
+          </Link>
         </p>
       </div>
     </div>

@@ -10,6 +10,7 @@ import CurrentUserContext from "../contexts/CurrentUserContext.js";
 import api from "../utils/api";
 import Register from "../components/Main/components/Register";
 import Login from "../components/Main/components/Login";
+import ProtectedRoute from "./Main/components/ProtectedRoute/ProtectedRoute.jsx";
 
 
 function App() {
@@ -144,12 +145,13 @@ function App() {
     <Routes>
       {/* Rotas públicas */}
       <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
 
       {/* Rotas privadas (protegidas por login) */}
       <Route
         path="/"
         element={
+          <ProtectedRoute isLoggedIn={loggedIn}>
           <div className="page__content">
             <Header />
 
@@ -184,6 +186,7 @@ function App() {
 
             <Footer />
           </div>
+          </ProtectedRoute>
         }
       />
     </Routes>
