@@ -14,10 +14,17 @@
   margin-bottom: 41px;
 }
 
+.header__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .header__email {
   color: white;
   font-size: 18px;
   font-weight: 500;
+  margin-right: 56px;
 }
 
 .header__logout {
