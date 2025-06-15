@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { authorize } from "../../../utils/auth";
 import vectorIcon from "../../../images/Vector.svg";
 
-function Login({ setLoggedIn }) {
+function Login({ setLoggedIn, setCurrentUser }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -13,11 +13,19 @@ function Login({ setLoggedIn }) {
     try {
       console.log("Start loading");
       const data = await authorize({ email, password });
+
       if (!data.token) {
         throw new Error("Token não encontrado");
       }
 
+      localStorage.setItem("jwt", data.token);
+
       setLoggedIn(true);
+      setCurrentUser((prev) => ({
+        ...prev,
+        email: email,
+      }));
+
       navigate("/");
     } catch (error) {
       alert("Erro no login");

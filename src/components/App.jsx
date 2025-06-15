@@ -19,6 +19,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({
     name: "Vanessa",
     about: "Web Developer",
+    email: "",
   });
   const [loggedIn, setLoggedIn] = useState(false);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
@@ -202,7 +203,7 @@ function App() {
           }
         />
 
-        <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
+        <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setCurrentUser={setCurrentUser} />} />
 
         {/* Rotas privadas (protegidas por login) */}
         <Route
@@ -210,7 +211,7 @@ function App() {
           element={
             <ProtectedRoute isLoggedIn={loggedIn}>
               <div className="page__content">
-                <Header handleLogout={handleLogout} />
+                <Header email={currentUser.email} handleLogout={handleLogout} />
 
                 <Main
                   handleEditUserPopup={handleEditUserPopup}
