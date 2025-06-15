@@ -72,14 +72,14 @@
 }
 
 @media screen and (max-width: 1080px) {
-  .card {
+  .cards-list {
     width: 880px;
     margin: 50px auto 0px;
   }
 }
 
 @media screen and (max-width: 880px) {
-  .card {
+  .cards-list {
     width: 580px;
     margin: 50px auto 0px;
     grid-template-rows: repeat(3, 1fr);
@@ -89,7 +89,7 @@
 }
 
 @media screen and (max-width: 680px) {
-  .card {
+  .cards-list {
     width: 282px;
     margin: 0px 19px 0px 19px;
     display: grid;

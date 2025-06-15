@@ -43,6 +43,10 @@
   margin: 0px auto 0px;
 }
 
+.header__menu-toggle {
+  display: none;
+}
+
 @media screen and (max-width: 880px) {
   .header {
     max-width: 700px;
@@ -64,6 +68,8 @@
   }
 }
 
+/* -------------------MODO CELULAR------------*/
+
 @media screen and (max-width: 680px) {
   .header {
     max-width: 320px;
@@ -72,18 +78,72 @@
 
   .header__content {
     max-width: 320px;
-    /* height: 46px; */
+  }
+
+  .header__logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
   }
 
   .header__logo {
     max-width: 126px;
-    /* height: 24px; */
-    margin: 0px 167px 32px 27px;
   }
 
   .header__line {
     border: 1px solid #545454;
     max-width: 320px;
     margin: 0;
+  }
+
+  .header__container {
+    display: none;
+  }
+
+  .header__menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 19px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: auto;
+  }
+
+  .header__menu-line {
+    width: 24px;
+    height: 2px;
+    border: 3px solid #ffffff;
+  }
+
+  .header__close-icon {
+    font-size: 24px;
+    color: white;
+  }
+
+  .header__mobile-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #000;
+  }
+
+  .header__email {
+    color: white;
+    margin: 40px auto 0px;
+  }
+
+  .header__logout {
+    margin: 12px 0;
+  }
+
+  .header__line--mobile {
+    width: 100%;
+    max-width: 320px;
+    margin: 46px auto 27px;
+    border: 1px solid #545454;
   }
 }
