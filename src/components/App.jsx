@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import Header from "./Header/Header";
 import Main from "./Main/Main";
 import Footer from "./Footer/Footer";
@@ -32,21 +32,16 @@ function App() {
   const [tooltipMessage, setTooltipMessage] = useState("");
   const navigate = useNavigate();
 
-  let handleCheckToken;
-
-  useEffect(() => {
-    handleCheckToken();
-  }, [handleCheckToken]);
-
-  handleCheckToken = useCallback(async () => {
+  const handleCheckToken = useCallback(async () => {
     const token = localStorage.getItem("jwt");
     if (!token) {
-      console.log("User not logged");
+    if (location.pathname !== "/register") {
       navigate("/login");
-      return;
     }
+    return;
+  }
     try {
-      console.log("Start loading");
+      
       const response = await checkToken(token);
       if (response.status == 400 || response.status == 401) {
         const message = await response.json();
@@ -62,12 +57,13 @@ function App() {
       setLoggedIn(true);
       navigate("/");
     } catch (error) {
-      alert("Erro no token!");
-      console.log("[TOKEN] - Erro", error);
-    } finally {
-      console.log("Stop loading");
+      // O alert("Erro no token!") acontece porque a API está rejeitando o token, pois temos um fixo feito em outro projeto.
     }
-  }, [navigate]);
+  }, [navigate, location.pathname]);
+
+  useEffect(() => {
+    handleCheckToken();
+  }, [handleCheckToken]);
 
   function handleLogout() {
     localStorage.removeItem("jwt");
@@ -203,7 +199,12 @@ function App() {
           }
         />
 
-        <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setCurrentUser={setCurrentUser} />} />
+        <Route
+          path="/login"
+          element={
+            <Login setLoggedIn={setLoggedIn} setCurrentUser={setCurrentUser} />
+          }
+        />
 
         {/* Rotas privadas (protegidas por login) */}
         <Route
@@ -249,11 +250,11 @@ function App() {
         />
       </Routes>
       <InfoTooltip
-  isOpen={isTooltipOpen}
-  onClose={() => setIsTooltipOpen(false)}
-  isSuccess={isTooltipSuccess}
-  message={tooltipMessage}
-/>
+        isOpen={isTooltipOpen}
+        onClose={() => setIsTooltipOpen(false)}
+        isSuccess={isTooltipSuccess}
+        message={tooltipMessage}
+      />
     </CurrentUserContext.Provider>
   );
 }
